@@ -9,7 +9,7 @@ export default createGlobalStyle`
 
    html, 
    body {
-    overflow: hidden;
+    overflow-x: hidden;
    }
 
    body {
