@@ -28,14 +28,10 @@ const Home: NextPage = () => {
           slug: "como-fazer-x-coisas-com-react-js",
           title: "Como fazer X coisas com React.js",
           imageUrls: {
-            default:
-              "https://storage.googleapis.com/alganews-files/posts/avatar-joao.jpeg",
-            small:
-              "https://storage.googleapis.com/alganews-files/posts/avatar-joao-small.jpeg",
-            medium:
-              "https://storage.googleapis.com/alganews-files/posts/avatar-joao-medium.jpeg",
-            large:
-              "https://storage.googleapis.com/alganews-files/posts/avatar-joao-large.jpeg",
+            default: "/laptop.jpg",
+            small: "/laptop.jpg",
+            medium: "/laptop.jpg",
+            large: "/laptop.jpg",
           },
           editor: {
             id: 29,
