@@ -82,6 +82,10 @@ const Tags = styled.ul`
   list-style: none;
   display: flex;
   gap: 8px;
+
+  @media screen and (max-width: 767px) {
+    display: none;
+  }
 `
 
 const Tag = styled.li`
