@@ -1,4 +1,5 @@
 import { Post, PostService } from "goodvandro-alganews-sdk"
+import { ResourceNotFoundError } from "goodvandro-alganews-sdk/dist/errors"
 import { GetServerSideProps } from "next"
 import { ParsedUrlQuery } from "querystring"
 
@@ -34,11 +35,14 @@ export const getServerSideProps: GetServerSideProps<PostProps, Params> =
         },
       }
     } catch (error: any) {
-      console.log(error)
+      if (error instanceof ResourceNotFoundError) {
+        return { notFound: true }
+      }
       return {
         props: {
           error: {
             message: error.message,
+            statusCode: error.data?.status || 500,
           }
         },
       }

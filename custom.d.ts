@@ -1,5 +1,6 @@
 declare interface NextPageProps {
   error?: {
-    message: string
+    message: string,
+    statusCode: number,
   }
 }
