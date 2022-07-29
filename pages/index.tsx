@@ -1,10 +1,11 @@
 import { Post, PostService } from 'goodvandro-alganews-sdk'
+import { ServerResponse } from 'http'
 import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
 import FeaturedPost from '../components/FeaturedPost'
 
 interface HomeProps {
-  posts: Post.Paginated
+  posts?: Post.Paginated
 }
 
 export default function Home(props: HomeProps) {
@@ -23,11 +24,28 @@ export default function Home(props: HomeProps) {
   )
 }
 
+function sendToHomePage(res: ServerResponse) {
+  res.statusCode = 302
+  res.setHeader('Location', '/?page=1')
+  return { props: {} }
+}
+
 export const getServerSideProps: GetServerSideProps<HomeProps> = async (
-  context
+  { query, res }
 ) => {
-  const { page } = context.query
+  const { page: _page } = query
+
+  const page = Number(_page)
+
+  if (isNaN(page) || page < 1) {
+    return sendToHomePage(res)
+  }
+
   const posts = await PostService.getAllPosts({ page: Number(page) - 1 })
+
+  if (!posts.content?.length) {
+    return sendToHomePage(res)
+  }
 
   return {
     props: {
