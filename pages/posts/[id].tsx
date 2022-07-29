@@ -2,8 +2,8 @@ import { Post, PostService } from "goodvandro-alganews-sdk"
 import { GetServerSideProps } from "next"
 import { ParsedUrlQuery } from "querystring"
 
-interface PostProps {
-  post?: Post.Detailed
+interface PostProps extends NextPageProps {
+  post?: Post.Detailed,
 }
 
 export default function PostPage(props: PostProps) {
@@ -33,9 +33,14 @@ export const getServerSideProps: GetServerSideProps<PostProps, Params> =
           post,
         },
       }
-    } catch (err) {
+    } catch (error: any) {
+      console.log(error)
       return {
-        props: {},
+        props: {
+          error: {
+            message: error.message,
+          }
+        },
       }
     }
   }
