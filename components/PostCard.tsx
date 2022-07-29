@@ -1,5 +1,6 @@
 import { Post } from "goodvandro-alganews-sdk";
 import Image from "next/image";
+import Link from "next/link";
 import { transparentize } from "polished";
 import styled from "styled-components";
 
@@ -11,32 +12,24 @@ export default function PostCard(props: PostCardProps) {
   const { post } = props
 
   return (
-    <Wrapper>
-      <Thumbnail bg={post.imageUrls.small} />
-      <Info>
-        <Editor>
-          <EditorImage
-            src={post.editor.avatarUrls.small}
-            width={64}
-            height={64}
-          />
-        </Editor>
-        <PublishDate>há 3 dias</PublishDate>
-        <Title>{post.title}</Title>
-      </Info>
-      {props.post.title}
-    </Wrapper>
+    <Link href={`/posts/${post.id}/${post.slug}`} passHref>
+      <Wrapper>
+        <Thumbnail bg={post.imageUrls.small} />
+        <Info>
+          <Editor>
+            <EditorImage
+              src={post.editor.avatarUrls.small}
+              width={64}
+              height={64}
+            />
+          </Editor>
+          <PublishDate>há 3 dias</PublishDate>
+          <Title>{post.title}</Title>
+        </Info>
+      </Wrapper>
+    </Link>
   )
 }
-
-const Wrapper = styled.div`
-  position: relative;
-  min-height: 256px;
-  background-color: ${p => p.theme.activeElementBackground};
-  color: ${p => p.theme.activeElementForeground};
-  border-radius: ${p => p.theme.borderRadius};
-  box-shadow: 0 3px 6px ${p => transparentize(0.9, p.theme.activeElementForeground)};
-`
 
 const Thumbnail = styled.div<{ bg: string }>`
   position: absolute;
@@ -51,6 +44,38 @@ const Thumbnail = styled.div<{ bg: string }>`
 
   border-top-left-radius: ${p => p.theme.borderRadius};
   border-top-right-radius: ${p => p.theme.borderRadius};
+`
+
+const Wrapper = styled.a`
+  position: relative;
+  min-height: 256px;
+  background-color: ${p => p.theme.activeElementBackground};
+  color: ${p => p.theme.activeElementForeground};
+  border-radius: ${p => p.theme.borderRadius};
+  box-shadow: 0 3px 6px ${p => transparentize(0.9, p.theme.activeElementForeground)};
+
+  transition: 0.25s ease;
+
+  * {
+    transition: 0.25s ease;
+  }
+
+  &:hover,
+  &:focus {
+    background-color: ${p => p.theme.primaryBackground};
+    box-shadow: 0 0 0 4px ${p => transparentize(0.7, p.theme.primaryBackground)};
+
+    outline: none;
+
+    * {
+      color: ${p => p.theme.primaryForeground};
+    }
+
+    ${Thumbnail} {
+      height: 100%;
+      opacity: 0.1;
+    }
+  }
 `
 
 const Info = styled.div`
