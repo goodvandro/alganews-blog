@@ -2,6 +2,8 @@ import { Post, PostService } from 'goodvandro-alganews-sdk'
 import { ServerResponse } from 'http'
 import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
+import Router from 'next/router'
+import ReactPaginate from 'react-paginate'
 import FeaturedPost from '../components/FeaturedPost'
 import PageGrid from '../components/PageGrid'
 import PostCard from '../components/PostCard'
@@ -28,6 +30,18 @@ export default function Home(props: HomeProps) {
           return <PostCard key={post.id} post={post} />
         })}
       </PostsGrid>
+
+      <ReactPaginate
+        pageCount={posts?.totalPages || 0}
+        pageRangeDisplayed={2}
+        marginPagesDisplayed={0}
+        previousLabel={'<'}
+        nextLabel={'>'}
+        hrefBuilder={(page) => `/?page=${page}`}
+        onPageChange={(page) => {
+          Router.push(`/?page=${page.selected + 1}`)
+        }}
+      />
     </PageGrid>
   )
 }
