@@ -2,14 +2,24 @@ import { Post, PostService } from "goodvandro-alganews-sdk"
 import { ResourceNotFoundError } from "goodvandro-alganews-sdk/dist/errors"
 import { GetServerSideProps } from "next"
 import { ParsedUrlQuery } from "querystring"
+import Head from 'next/head';
 
 interface PostProps extends NextPageProps {
-  post?: Post.Detailed,
+  post?: Post.Detailed
+  host?: string
 }
 
 export default function PostPage(props: PostProps) {
   return (
-    <div> {props.post?.title} </div>
+    <>
+      <Head>
+        <link
+          rel="canonical"
+          href={`http://localhost:3000/posts/${props.post?.id}/${props.post?.slug}`}
+        />
+      </Head>
+      <div> {props.post?.title} </div>
+    </>
   )
 }
 
@@ -19,7 +29,7 @@ interface Params extends ParsedUrlQuery {
 }
 
 export const getServerSideProps: GetServerSideProps<PostProps, Params> =
-  async ({ params, res }) => {
+  async ({ params, res, req }) => {
     try {
       if (!params) return { notFound: true }
 
@@ -30,15 +40,10 @@ export const getServerSideProps: GetServerSideProps<PostProps, Params> =
 
       const post = await PostService.getExistingPost(postId)
 
-      if (slug !== post.slug) {
-        res.statusCode = 301 // redirecting status code
-        res.setHeader('Location', `/posts/${post.id}/${post.slug}`)
-        return { props: {} }
-      }
-
       return {
         props: {
           post,
+          host: req.headers.host,
         },
       }
     } catch (error: any) {
