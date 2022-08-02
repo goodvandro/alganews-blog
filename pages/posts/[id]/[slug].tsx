@@ -3,6 +3,7 @@ import { ResourceNotFoundError } from "goodvandro-alganews-sdk/dist/errors"
 import { GetServerSideProps } from "next"
 import { ParsedUrlQuery } from "querystring"
 import Head from 'next/head';
+import PostHeader from "../../../components/PostHeader";
 
 interface PostProps extends NextPageProps {
   post?: Post.Detailed
@@ -10,6 +11,8 @@ interface PostProps extends NextPageProps {
 }
 
 export default function PostPage(props: PostProps) {
+  const { post } = props;
+
   return (
     <>
       <Head>
@@ -18,7 +21,16 @@ export default function PostPage(props: PostProps) {
           href={`http://localhost:3000/posts/${props.post?.id}/${props.post?.slug}`}
         />
       </Head>
-      <div> {props.post?.title} </div>
+      {post && (
+        <>
+          <PostHeader
+            thumbnail={post?.imageUrls.large}
+            createdAt={post?.createdAt}
+            editor={post?.editor}
+            title={post?.title}
+          />
+        </>
+      )}
     </>
   )
 }
