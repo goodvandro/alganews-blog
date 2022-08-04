@@ -2,6 +2,7 @@ import { Post } from "goodvandro-alganews-sdk";
 import Link from "next/link";
 import { transparentize } from "polished";
 import styled from "styled-components";
+import formatPostDate from "../core/utils/fomatPostDate";
 import Avatar from "./Avatar";
 
 interface FeaturedPostProps {
@@ -12,7 +13,7 @@ export default function FeaturedPost(props: FeaturedPostProps) {
   const { id, slug } = props.postSummary;
 
   return (
-    <Link href={`/post/${id}/${slug}`} passHref>
+    <Link href={`/posts/${id}/${slug}`} passHref>
       <Wrapper >
         <BgImage bg={props.postSummary.imageUrls.medium} />
         <Content>
@@ -25,7 +26,7 @@ export default function FeaturedPost(props: FeaturedPostProps) {
             <Avatar src={props.postSummary.editor.avatarUrls.small} />
             <EditorDescription>
               <EditorName>{props.postSummary.editor.name}</EditorName>
-              <PostDate>{'há 3 dias'}</PostDate>
+              <PostDate>{formatPostDate(props.postSummary.createdAt)}</PostDate>
             </EditorDescription>
           </Editor>
           <Title>{props.postSummary.title}</Title>
