@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@badrap/bar-of-progress": "^0.2.1",
     "babel-plugin-styled-components": "^2.0.7",
     "date-fns": "^2.29.1",
     "disqus-react": "^1.1.3",
