@@ -6,7 +6,7 @@ export default function NavBar() {
     <nav>
       <Wrapper>
         <li>
-          <Link href={"/?page=1"} passHref={true}>
+          <Link href="/" passHref={true}>
             <a>home</a>
           </Link>
         </li>
