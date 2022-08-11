@@ -3,6 +3,7 @@ import { ResourceNotFoundError } from "goodvandro-alganews-sdk/dist/errors"
 import { GetServerSideProps } from "next"
 import { ParsedUrlQuery } from "querystring"
 import Head from 'next/head';
+import { DiscussionEmbed } from 'disqus-react';
 import PostHeader from "../../../components/PostHeader";
 import Markdown from "../../../components/Markdown";
 
@@ -37,9 +38,18 @@ export default function PostPage(props: PostProps) {
             editor={post?.editor}
             title={post?.title}
           />
-          <Markdown>
-            {post.body}
-          </Markdown>
+          <Markdown>{post.body}</Markdown>
+          <DiscussionEmbed
+            shortname='alganews-14'
+            config={
+              {
+                url: `http://localhost:3000/posts/${props.post?.id}/${props.post?.slug}`,
+                identifier: String(post?.id),
+                title: post?.title,
+                language: 'pt_BR',
+              }
+            }
+          />
         </>
       )}
     </>
