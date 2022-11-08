@@ -1,15 +1,15 @@
-import { Post, PostService } from "goodvandro-alganews-sdk"
-import { ResourceNotFoundError } from "goodvandro-alganews-sdk/dist/errors"
-import { GetServerSideProps } from "next"
-import { ParsedUrlQuery } from "querystring"
-import Head from 'next/head';
-import { DiscussionEmbed } from 'disqus-react';
+import { Post, PostService } from "goodvandro-alganews-sdk";
+import { ResourceNotFoundError } from "goodvandro-alganews-sdk/dist/errors";
+import { GetServerSideProps } from "next";
+import { ParsedUrlQuery } from "querystring";
+import Head from "next/head";
+import { DiscussionEmbed } from "disqus-react";
 import PostHeader from "../../../components/PostHeader";
 import Markdown from "../../../components/Markdown";
 
 interface PostProps extends NextPageProps {
-  post?: Post.Detailed
-  host?: string
+  post?: Post.Detailed;
+  host?: string;
 }
 
 export default function PostPage(props: PostProps) {
@@ -40,56 +40,58 @@ export default function PostPage(props: PostProps) {
           />
           <Markdown>{post.body}</Markdown>
           <DiscussionEmbed
-            shortname='alganews-14'
-            config={
-              {
-                url: `http://localhost:3000/posts/${props.post?.id}/${props.post?.slug}`,
-                identifier: String(post?.id),
-                title: post?.title,
-                language: 'pt_BR',
-              }
-            }
+            shortname="alganews-14"
+            config={{
+              url: `http://localhost:3000/posts/${props.post?.id}/${props.post?.slug}`,
+              identifier: String(post?.id),
+              title: post?.title,
+              language: "pt_BR",
+            }}
           />
         </>
       )}
     </>
-  )
+  );
 }
 
 interface Params extends ParsedUrlQuery {
-  id: string
-  slug: string
+  id: string;
+  slug: string;
 }
 
-export const getServerSideProps: GetServerSideProps<PostProps, Params> =
-  async ({ params, res, req }) => {
-    try {
-      if (!params) return { notFound: true }
+export const getServerSideProps: GetServerSideProps<
+  PostProps,
+  Params
+> = async ({ params, res, req, query }) => {
+  try {
+    if (!params) return { notFound: true };
 
-      const { id, slug } = params
-      const postId = Number(id)
+    const { id, slug } = params;
+    const postId = Number(id);
 
-      if (isNaN(postId)) return { notFound: true }
+    const { token } = query;
 
-      const post = await PostService.getExistingPost(postId)
+    if (isNaN(postId)) return { notFound: true };
 
-      return {
-        props: {
-          post,
-          host: req.headers.host,
-        },
-      }
-    } catch (error: any) {
-      if (error instanceof ResourceNotFoundError) {
-        return { notFound: true }
-      }
-      return {
-        props: {
-          error: {
-            message: error.message,
-            statusCode: error.data?.status || 500,
-          }
-        },
-      }
+    const post = await PostService.getExistingPost(postId, token as string);
+
+    return {
+      props: {
+        post,
+        host: req.headers.host,
+      },
+    };
+  } catch (error: any) {
+    if (error instanceof ResourceNotFoundError) {
+      return { notFound: true };
     }
+    return {
+      props: {
+        error: {
+          message: error.message,
+          statusCode: error.data?.status || 500,
+        },
+      },
+    };
   }
+};
